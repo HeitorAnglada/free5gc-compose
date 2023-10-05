@@ -8,41 +8,72 @@ You can setup your own config in [config](./config) folder and [docker-compose.y
 
 - I use Ubuntu 20.04 LTS and Kernel 5.15.0
 - [GTP5G kernel module](https://github.com/free5gc/gtp5g): needed to run the UPF
-- [Docker Engine](https://docs.docker.com/engine/install): needed to run the Free5GC containers
-- [Docker Compose v2](https://docs.docker.com/compose/install): needed to bootstrap the free5GC stack
+  
+```bash
+git clone https://github.com/free5gc/gtp5g.git && cd gtp5g
+make clean && make
+```
 
-**Note: AVX for MongoDB**: some HW does not support MongoDB releases above`4.4` due to use of the new AVX instructions set. To verify if your CPU is compatible you can check CPU flags by running `grep avx /proc/cpuinfo`. A workaround is suggested [here](https://github.com/free5gc/free5gc-compose/issues/30#issuecomment-897627049).
+- [Docker Engine](https://docs.docker.com/engine/install): needed to run the Free5GC 
+
+Run the following command to uninstall all conflicting packages:
+
+```bash
+for pkg in docker.io docker-doc docker-compose podman-docker containerd runc; do sudo apt-get remove $pkg; done
+```
+
+Set up Docker's Apt repository.
+
+```bash
+# Add Docker's official GPG key:
+sudo apt-get update
+```
+```bash
+sudo apt-get install ca-certificates curl gnupg
+```
+
+```bash
+sudo install -m 0755 -d /etc/apt/keyrings
+
+```
+
+```bash
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+```
+
+```bash
+sudo chmod a+r /etc/apt/keyrings/docker.gpg
+```
+
+```bash
+# Add the repository to Apt sources:
+echo \
+  "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+  "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | \
+  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+sudo apt-get update
+```
+
+Install
+```bash
+sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+```
+Verify docker installation
+```bash
+sudo docker run hello-world
+```
 
 ## Start free5gc
 
 Because we need to create tunnel interface, we need to use privileged container with root permission.
 
-### Pull docker images from Docker Hub
-
-```bash
-docker compose pull
-```
-
-### [Optional] Build docker images from local sources
 
 ```bash
 # Clone the project
-git clone https://github.com/free5gc/free5gc-compose.git
+git clone https://github.com/HeitorAnglada/free5gc-compose.git
 cd free5gc-compose
-
-# clone free5gc sources
-cd base
-git clone --recursive -j `nproc` https://github.com/free5gc/free5gc.git
-cd ..
-
-# Build the images
-make all
-docker compose -f docker-compose-build.yaml build
-
-# Alternatively you can build specific NF image e.g.:
-make amf
-docker compose -f docker-compose-build.yaml build free5gc-amf
 ```
+# clone free5gc sources
 
 Note:
 
@@ -57,8 +88,6 @@ docker rmi $(docker images -f "dangling=true" -q)
 You can create free5GC containers based on local images or docker hub images:
 
 ```bash
-# use local images
-docker compose -f docker-compose-build.yaml up
 # use images from docker hub
 docker compose up # add -d to run in background mode
 ```
@@ -66,8 +95,6 @@ docker compose up # add -d to run in background mode
 Destroy the established container resource after testing:
 
 ```bash
-# Remove established containers (local images)
-docker compose -f docker-compose-build.yaml rm
 # Remove established containers (remote images)
 docker compose rm
 ```
@@ -98,20 +125,6 @@ The integration with the [UERANSIM](https://github.com/aligungr/UERANSIM) eNB/UE
 You can also refer to this [issue](https://github.com/free5gc/free5gc-compose/issues/26) to find out how you can configure the UPF to forward traffic between the [UERANSIM](https://github.com/aligungr/UERANSIM) to the DN (eg. internet) in a docker environment.
 
 This [issue](https://github.com/free5gc/free5gc-compose/issues/28) provides detailed steps that might be useful.
-
-## Integration of WebUI with Nginx reverse proxy
-
-Here you can find helpful guidelines on the integration of Nginx reverse proxy to set it in front of the WebUI: https://github.com/free5gc/free5gc-compose/issues/55#issuecomment-1146648600
-
-## Vagrant Box Option
-
-For Linux kernel version below 5.4 you can setup a working environment using a vagrant box: https://github.com/abousselmi/vagrant-free5gc
-Please refer to [GTP5G kernel module](https://github.com/free5gc/gtp5g) for more information.
-
-## ULCL Configuration 
-You can check the following informations below:
-- [ulcl-example branch](https://github.com/free5gc/free5gc-compose/tree/ulcl-example), or
-- [patch file](https://github.com/ianchen0119/free5gc-compose-ulcl)
 
 ## Reference
 - https://github.com/open5gs/nextepc/tree/master/docker
