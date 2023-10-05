@@ -6,6 +6,7 @@ You can setup your own config in [config](./config) folder and [docker-compose.y
 
 ## Prerequisites
 
+- I use Ubuntu 20.04 LTS and Kernel 5.15.0
 - [GTP5G kernel module](https://github.com/free5gc/gtp5g): needed to run the UPF
 - [Docker Engine](https://docs.docker.com/engine/install): needed to run the Free5GC containers
 - [Docker Compose v2](https://docs.docker.com/compose/install): needed to bootstrap the free5GC stack
