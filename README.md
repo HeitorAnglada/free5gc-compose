@@ -12,6 +12,7 @@ You can setup your own config in [config](./config) folder and [docker-compose.y
 ```bash
 git clone https://github.com/free5gc/gtp5g.git && cd gtp5g
 make clean && make
+sudo make install
 ```
 
 - [Docker Engine](https://docs.docker.com/engine/install): needed to run the Free5GC 
