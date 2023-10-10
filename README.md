@@ -126,6 +126,58 @@ You can also refer to this [issue](https://github.com/free5gc/free5gc-compose/is
 
 This [issue](https://github.com/free5gc/free5gc-compose/issues/28) provides detailed steps that might be useful.
 
+## Scenario
+
+<p align="center">
+  <a href="https://github.com/HeitorAnglada/free5gc-compose">
+    <img src="https://i.ibb.co/3Tf7mdc/free5gc-slice-cenario.png" width="1000" alt="free5gc-slice">
+  </a>
+</p>
+
+We will test a core slicing scenario consisting of a gNB with two UEs in different slices connected to it. Each UE connects to the internet through a different UPF.
+
+### Step 1
+After run the Docker Compose, execute the following command to start the two UEs.:
+```bash
+# Start the first UE
+docker exec ueransim-ue bash -c "./nr-ue -c ./config/uecfg.yaml &"
+
+#Start the second UE
+docker exec ueransim-ue bash -c "./nr-ue -c ./config/uecfg2.yaml &"
+```
+
+### Step 2
+Execute the tcpdump command on the UPFs to monitor the traffic passing through each of them.
+
+```bash
+# Run tcpdump on UPF
+docker exec upf bash -c "tcpdump"
+
+# Run tcpdump on UPF-2
+docker exec upf-2 bash -c "tcpdump"
+```
+### Step 3
+Generate traffic from the UEs by executing a ping to the Google server.
+
+```bash
+# Ping on the interface of the first UE (uesimtun0)
+docker exec ueransim-ue bash -c "ping google.com -I uesimtun0"
+
+# Ping on the interface of the second UE (uesimtun1)
+docker exec ueransim-ue bash -c "ping google.com -I uesimtun1"
+```
+### Conclusion
+
+When we run the ping from UE 1's interface, we observe this traffic passing through UPF-1. However, when we run the ping from UE 2's interface, we see the traffic passing through UPF-2.
+
+
+
+
+
+
+
+
+
 ## Reference
 - https://github.com/open5gs/nextepc/tree/master/docker
 - https://github.com/abousselmi/docker-free5gc

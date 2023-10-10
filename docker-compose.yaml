@@ -4,7 +4,11 @@ services:
   free5gc-upf:
     container_name: upf
     image: free5gc/upf:v3.3.0
-    command: bash -c "./upf-iptables.sh && ./upf -c ./config/upfcfg.yaml"
+    command: >
+      bash -c "
+        ./upf-iptables.sh &&
+        apt update && apt install -y tcpdump &&
+        ./upf -c ./config/upfcfg.yaml"
     volumes:
       - ./config/upfcfg.yaml:/free5gc/config/upfcfg.yaml
       - ./config/upf-iptables.sh:/free5gc/upf-iptables.sh
@@ -18,7 +22,11 @@ services:
   free5gc-upf-2:
     container_name: upf-2
     image: free5gc/upf:v3.3.0
-    command: bash -c "./upf-iptables.sh && ./upf -c ./config/upfcfg.yaml"
+    command: >
+      bash -c "
+        ./upf-iptables.sh &&
+        apt update && apt install -y tcpdump &&
+        ./upf -c ./config/upfcfg.yaml"
     volumes:
       - ./config/upfcfg2.yaml:/free5gc/config/upfcfg.yaml
       - ./config/upf-iptables.sh:/free5gc/upf-iptables.sh
