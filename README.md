@@ -147,14 +147,14 @@ We will test a core slicing scenario consisting of a gNB with two UEs in differe
 - In the panel that opens in a new subscription, you should add a UE with the IMSI and the slice data (SD and SSD) below:
 
 <p align="center">
-  <a href="https://github.com/HeitorAnglada/free5gc-compose">
+  <a href="https://i.ibb.co/9p3FSJd/ue01-sub.png">
     <img src="https://i.ibb.co/9p3FSJd/ue01-sub.png" width="1000" alt="free5gc-conf01">
     
   </a>
 </p>
 
 <p align="center">
-  <a href="https://github.com/HeitorAnglada/free5gc-compose">
+  <a href="https://i.ibb.co/5c4ZqfJ/ue02-sub.png">
     <img src="https://i.ibb.co/5c4ZqfJ/ue02-sub.png" width="1000" alt="free5gc-conf02">
     
   </a>
