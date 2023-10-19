@@ -138,6 +138,29 @@ This [issue](https://github.com/free5gc/free5gc-compose/issues/28) provides deta
 We will test a core slicing scenario consisting of a gNB with two UEs in different slices connected to it. Each UE connects to the internet through a different UPF.
 
 ### Step 1
+- Subscribe the User Equipments (UEs) to the graphical user interface of free5GC. To access the interface, simply open your web browser and navigate to port 5000, specifying either 'localhost' or the desired IP address.
+
+- Login: admin
+
+  Pass: free5gc
+
+- In the panel that opens in a new subscription, you should add a UE with the IMSI and the slice data (SD and SSD) below:
+
+<p align="center">
+  <a href="https://github.com/HeitorAnglada/free5gc-compose">
+    <img src="https://i.ibb.co/9p3FSJd/ue01-sub.png" width="1000" alt="free5gc-conf01">
+    
+  </a>
+</p>
+
+<p align="center">
+  <a href="https://github.com/HeitorAnglada/free5gc-compose">
+    <img src="https://i.ibb.co/5c4ZqfJ/ue02-sub.png" width="1000" alt="free5gc-conf02">
+    
+  </a>
+</p>
+
+### Step 2
 After run the Docker Compose, execute the following command to start the two UEs.:
 ```bash
 # Start the first UE
@@ -147,7 +170,7 @@ docker exec ueransim-ue bash -c "./nr-ue -c ./config/uecfg.yaml &"
 docker exec ueransim-ue bash -c "./nr-ue -c ./config/uecfg2.yaml &"
 ```
 
-### Step 2
+### Step 3
 Execute the tcpdump command on the UPFs to monitor the traffic passing through each of them.
 
 ```bash
@@ -157,7 +180,7 @@ docker exec upf bash -c "tcpdump"
 # Run tcpdump on UPF-2
 docker exec upf-2 bash -c "tcpdump"
 ```
-### Step 3
+### Step 4
 Generate traffic from the UEs by executing a ping to the Google server.
 
 ```bash
